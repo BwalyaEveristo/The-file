@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books - Library Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='books.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar/Navigation -->
+        <nav class="sidebar">
+            <h2>Library Dashboard</h2>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+                <li><a href="{{ url_for('student') }}">Student</a></li>
+                <li><a href="{{ url_for('borrowed books') }}">Borrowed Books</a></li>
+                <li><a href="{{ url_for('books') }}">Books</a></li>
+                <li><a href="{{ url_for('home') }}">Login</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <header>
+                <h1>Books in the Library</h1>
+            </header>
+
+            <!-- Search Bar -->
+            <section class="search-section">
+                <input type="text" id="search-input" onkeyup="searchBooks()" placeholder="Search for books...">
+            </section>
+
+            <!-- Books Table -->
+            <section class="table-section">
+                <table id="books-table">
+                    <thead>
+                        <tr>
+                            <th>Book ID</th>
+                            <th>Book Name</th>
+                            <th>Author</th>
+                            <th>Actions</th> <!-- Added Actions Column -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>The Great Gatsby</td>
+                            <td>F. Scott Fitzgerald</td>
+                            <td><button onclick="deleteBook(1)">Delete</button></td> <!-- Delete Button -->
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>1984</td>
+                            <td>George Orwell</td>
+                            <td><button onclick="deleteBook(2)">Delete</button></td> <!-- Delete Button -->
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>To Kill a Mockingbird</td>
+                            <td>Harper Lee</td>
+                            <td><button onclick="deleteBook(3)">Delete</button></td> <!-- Delete Button -->
+                        </tr>
+                        <!-- More rows as needed -->
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Search function to filter through the table
+        function searchBooks() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("search-input");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("books-table");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 1; i < tr.length; i++) {
+                tr[i].style.display = "none";  // Initially hide all rows
+
+                td = tr[i].getElementsByTagName("td");
+                for (var j = 0; j < td.length; j++) {
+                    if (td[j]) {
+                        txtValue = td[j].textContent || td[j].innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";  // Show the row if a match is found
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Delete function to remove a book from the table (and database)
+        function deleteBook(bookId) {
+            if (confirm("Are you sure you want to delete this book?")) {
+                // Code to remove the book from the database
+                console.log("Deleting book with ID:", bookId);
+
+                // Remove the row from the table for immediate visual feedback
+                var table = document.getElementById("books-table");
+                var rows = table.getElementsByTagName("tr");
+
+                for (var i = 1; i < rows.length; i++) {
+                    var cells = rows[i].getElementsByTagName("td");
+                    if (cells[0] && cells[0].textContent == bookId) {
+                        table.deleteRow(i);
+                        break;
+                    }
+                }
+
+                // After this point, you should also make a request to your backend to actually delete the book from the database
+                // Example:
+                // fetch('/delete-book', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                //     body: JSON.stringify({ id: bookId }),
+                // }).then(response => {
+                //     if (response.ok) {
+                //         console.log("Book deleted successfully");
+                //     } else {
+                //         alert("Error deleting the book");
+                //     }
+                // });
+            }
+        }
+    </script>
+</body>
+</html>

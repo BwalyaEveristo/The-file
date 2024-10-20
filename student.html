@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students - Library Dashboard</title>
+    <link rel="stylesheet" href="student.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar/Navigation -->
+        <nav class="sidebar">
+            <h2>Library Dashboard</h2>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+                <li><a href="{{ url_for('student') }}">Student</a></li>
+                <li><a href="{{ url_for('borrowed books') }}">Borrowed Books</a></li>
+                <li><a href="{{ url_for('books') }}">Books</a></li>
+                <li><a href="{{ url_for('home') }}">Login</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <header>
+                <h1>Students in the Database</h1>
+            </header>
+
+            <!-- Search Bar -->
+            <section class="search-section">
+                <input type="text" id="search-input" onkeyup="searchStudents()" placeholder="Search for students...">
+            </section>
+
+            <!-- Add Student Button -->
+            <section class="add-student-section">
+                <button id="add-student-btn" onclick="openAddStudentForm()">Add Student</button>
+            </section>
+
+            <!-- Students Table -->
+            <section class="table-section">
+                <table id="students-table">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Mobile Number</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>John Doe</td>
+                            <td>john.doe@example.com</td>
+                            <td>123-456-7890</td>
+                            <td><button onclick="deleteStudent(1)">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Jane Smith</td>
+                            <td>jane.smith@example.com</td>
+                            <td>987-654-3210</td>
+                            <td><button onclick="deleteStudent(2)">Delete</button></td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Add Student Form (Modal) -->
+            <div id="add-student-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeAddStudentForm()">&times;</span>
+                    <h2>Add Student</h2>
+                    <form id="add-student-form" onsubmit="addStudent(event)">
+                        <label for="student-id">Student ID:</label>
+                        <input type="text" id="student-id" required>
+                        <label for="student-name">Name:</label>
+                        <input type="text" id="student-name" required>
+                        <label for="student-email">Email:</label>
+                        <input type="email" id="student-email" required>
+                        <label for="student-mobile">Mobile Number:</label>
+                        <input type="text" id="student-mobile" required>
+                        <button type="submit">Add Student</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Search function to filter through the student table
+        function searchStudents() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("search-input");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("students-table");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 1; i < tr.length; i++) {
+                tr[i].style.display = "none"; // Hide all rows initially
+
+                td = tr[i].getElementsByTagName("td");
+                for (var j = 0; j < td.length; j++) {
+                    if (td[j]) {
+                        txtValue = td[j].textContent || td[j].innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = ""; // Show matching rows
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Function to delete a student
+        function deleteStudent(studentId) {
+            if (confirm("Are you sure you want to delete this student?")) {
+                console.log("Deleting student with ID:", studentId);
+                
+                // Remove the student row from the table
+                var table = document.getElementById("students-table");
+                var rows = table.getElementsByTagName("tr");
+
+                for (var i = 1; i < rows.length; i++) {
+                    var cells = rows[i].getElementsByTagName("td");
+                    if (cells[0] && cells[0].textContent == studentId) {
+                        table.deleteRow(i);
+                        break;
+                    }
+                }
+
+                // Add code to delete the student from the database here
+                // Example:
+                // fetch('/delete-student', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                //     body: JSON.stringify({ id: studentId }),
+                // }).then(response => {
+                //     if (response.ok) {
+                //         console.log("Student deleted successfully");
+                //     } else {
+                //         alert("Error deleting the student");
+                //     }
+                // });
+            }
+        }
+
+        // Function to open the Add Student modal
+        function openAddStudentForm() {
+            document.getElementById("add-student-modal").style.display = "block";
+        }
+
+        // Function to close the Add Student modal
+        function closeAddStudentForm() {
+            document.getElementById("add-student-modal").style.display = "none";
+        }
+
+        // Function to add a student
+        function addStudent(event) {
+            event.preventDefault(); // Prevent form submission from refreshing the page
+
+            // Get form data
+            var studentId = document.getElementById("student-id").value;
+            var studentName = document.getElementById("student-name").value;
+            var studentEmail = document.getElementById("student-email").value;
+            var studentMobile = document.getElementById("student-mobile").value;
+
+            // Add the new student to the table
+            var table = document.getElementById("students-table").getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
+            newRow.innerHTML = `
+                <td>${studentId}</td>
+                <td>${studentName}</td>
+                <td>${studentEmail}</td>
+                <td>${studentMobile}</td>
+                <td><button onclick="deleteStudent(${studentId})">Delete</button></td>
+            `;
+
+            // Close the modal
+            closeAddStudentForm();
+
+            // Add code to save the student to the database here
+            // Example:
+            // fetch('/add-student', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({ id: studentId, name: studentName, email: studentEmail, mobile: studentMobile }),
+            // }).then(response => {
+            //     if (response.ok) {
+            //         console.log("Student added successfully");
+            //     } else {
+            //         alert("Error adding the student");
+            //     }
+            // });
+        }
+    </script>
+</body>
+</html>

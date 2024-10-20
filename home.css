@@ -1,0 +1,78 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.university-img {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    opacity: 0.8;
+}
+
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+}
+
+.overlay h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+.overlay p {
+    font-size: 1.5em;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+/* Login Button */
+.login-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    background-color: #5cb85c;
+    color: white;
+    text-decoration: none;
+    font-size: 1.2em;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-btn i {
+    margin-right: 10px;
+    font-size: 1.5em;
+}
+
+.login-btn:hover {
+    background-color: #4cae4c;
+}

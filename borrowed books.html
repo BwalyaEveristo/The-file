@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borrowed Books - Library Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='borrowed.css')}}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar/Navigation -->
+        <nav class="sidebar">
+            <h2>Library Dashboard</h2>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+                <li><a href="{{ url_for('student') }}">Student</a></li>
+                <li><a href="{{ url_for('borrowed books') }}">Borrowed Books</a></li>
+                <li><a href="{{ url_for('books') }}">Books</a></li>
+                <li><a href="{{ url_for('home') }}">Login</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <header>
+                <h1>Borrow Books</h1>
+            </header>
+
+            <!-- Borrow Book Form -->
+            <section class="borrow-book-section">
+                <h2>Borrow a Book</h2>
+                <form id="borrow-book-form" onsubmit="borrowBook(event)">
+                    <label for="student-id">Student ID:</label>
+                    <input type="text" id="student-id" required>
+                    <label for="Book Author">Book Author:</label>
+                    <input type="text" id="Book Author" required>
+                    <label for="book-id">Book ID:</label>
+                    <input type="text" id="book-id" required>
+                    <label for="due-date">Due Date:</label>
+                    <input type="date" id="due-date" required>
+                    <button type="submit">Borrow Book</button>
+                </form>
+            </section>
+
+            <!-- Borrowed Books Table -->
+            <section class="table-section">
+                <h2>Borrowed Books List</h2>
+                <table id="borrowed-books-table">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Book ID</th>
+                            <th>Book Author</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>101</td>
+                            <td>F. Scott Fitzgerald</td>
+                            <td>2024-10-25</td>
+                            <td>Borrowed</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>102</td>
+                            <td>George Orwell</td>
+                            <td>2024-11-01</td>
+                            <td>Returned</td>
+                        </tr>
+                        <!-- More rows as needed -->
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Function to borrow a book
+        function borrowBook(event) {
+            event.preventDefault(); // Prevent form submission from refreshing the page
+
+            // Get form data
+            var studentId = document.getElementById("student-id").value;
+            var bookId = document.getElementById("book-id").value;
+            var dueDate = document.getElementById("due-date").value;
+            var bookAuthor = "Author Name"; // Placeholder, you may fetch this from your database
+            
+            // Add the borrowed book to the table
+            var table = document.getElementById("borrowed-books-table").getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
+            newRow.innerHTML = `
+                <td>${studentId}</td>
+                <td>${bookId}</td>
+                <td>${bookAuthor}</td>
+                <td>${dueDate}</td>
+                <td>Borrowed</td>
+            `;
+
+            // Reset form
+            document.getElementById("borrow-book-form").reset();
+
+            // Add code to save the borrowed book information to the database here
+            // Example:
+            // fetch('/borrow-book', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({ studentId: studentId, bookId: bookId, dueDate: dueDate }),
+            // }).then(response => {
+            //     if (response.ok) {
+            //         console.log("Book borrowed successfully");
+            //     } else {
+            //         alert("Error borrowing the book");
+            //     }
+            // });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar/Navigation -->
+        <nav class="sidebar" role="navigation">
+            <h2>Library Dashboard</h2>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+                <li><a href="{{ url_for('student') }}">Student</a></li>
+                <li><a href="{{ url_for('borrowed books') }}">Borrowed Books</a></li>
+                <li><a href="{{ url_for('books') }}">Books</a></li>
+                <li><a href="{{ url_for('home') }}">Login</a></li>
+            </ul>
+        </nav>
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header>
+                <h1>Welcome to the Library Dashboard</h1>
+            </header>
+            <section class="stats-section">
+                <div class="stat-card">
+                    <h3>Students</h3>
+                    <p>Number of Students: <span id="students-count">{{ students_count }}</span></p>
+                </div>
+                <div class="stat-card">
+                    <h3>Books</h3>
+                    <p>Number of Books: <span id="books-count">{{ books_count }}</span></p>
+                </div>
+                <div class="stat-card">
+                    <h3>Borrowed Books</h3>
+                    <p>Number of Borrowed Books: <span id="borrowed-books-count">{{ borrowed_books_count }}</span></p>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
